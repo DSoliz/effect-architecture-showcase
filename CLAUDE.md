@@ -44,6 +44,7 @@ No component-specific styles should go in `design-system.css`.
 - TypeScript
 - Effect library ecosystem (effect, @effect/schema, @effect/rpc, @effect/platform)
 - XState Store (@xstate/store)
+- react-hook-form + @hookform/resolvers (form handling with Effect Schema validation via `effectTsResolver`)
 
 ## Folder Structure
 
@@ -86,7 +87,7 @@ effect-poc/
 ### `apps/web`
 - The main (and currently only) application in the monorepo
 - Next.js App Router app showcasing Effect-based architecture
-- **Dependencies**: `effect`, `@effect/platform`, `@effect/rpc`, `@xstate/store`, `lokijs`, `next`, `react`
+- **Dependencies**: `effect`, `@effect/platform`, `@effect/rpc`, `@xstate/store`, `lokijs`, `next`, `react`, `react-hook-form`, `@hookform/resolvers`
 - **Dev dependencies**: `vitest` (unit tests), `@playwright/test` (e2e tests), `typescript`, `eslint`
 - **Key architectural layers**:
   - `lib/domain/` — Effect Schema models defining the core domain
@@ -161,6 +162,16 @@ All domain types live in `lib/domain/` and are defined using Effect Schema. Foll
 - **Decode** (`Schema.decodeUnknown`) incoming data at API route handlers and RPC handlers — this is where untrusted data enters the system
 - **Encode** (`Schema.encode`) outgoing data before sending API responses — this ensures serialization matches the schema (e.g. `Date` becomes ISO string)
 - **Never** decode/encode inside services — services operate on validated domain types
+
+## Forms (react-hook-form + Effect Schema)
+
+Use `react-hook-form` with the `effectTsResolver` from `@hookform/resolvers/effect-ts` to validate forms using the same Effect Schemas defined in `lib/domain/`. This keeps validation logic in one place — the Schema is the single source of truth for both client-side form validation and server-side request decoding.
+
+### Guidelines
+- Define form schemas in `lib/domain/` alongside related entities (e.g. `CheckoutInfo` next to `Order`)
+- Use `effectTsResolver(MySchema)` as the `resolver` option in `useForm`
+- Map Schema field constraints (e.g. `Schema.NonEmptyString`, `Schema.pattern`) to user-friendly error messages via react-hook-form's `errors` object
+- Keep form components as molecules — they receive an `onSubmit` callback via props and do not call services directly
 
 ## Effect.gen (Generator-based composition)
 

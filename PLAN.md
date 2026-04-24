@@ -9,7 +9,7 @@ A single-restaurant online ordering app built with Next.js + Effect to showcase 
 - [ ] Initialize pnpm workspace (`pnpm-workspace.yaml`, root `package.json` with workspace scripts)
 - [ ] Set up Turborepo (`turbo.json` with `dev`, `build`, `typecheck`, `lint`, `test`, `test:unit` pipelines)
 - [ ] Scaffold `apps/web` with Next.js (App Router, TypeScript)
-- [ ] Install core dependencies: `effect`, `@effect/platform`, `@effect/rpc`, `@effect/sql`, `@xstate/store`, `lokijs`, `react`, `next`
+- [ ] Install core dependencies: `effect`, `@effect/platform`, `@effect/rpc`, `@effect/sql`, `@xstate/store`, `lokijs`, `react`, `next`, `react-hook-form`, `@hookform/resolvers`
 - [ ] Install dev dependencies: `vitest`, `@playwright/test`, `typescript`, `eslint`
 - [ ] Create `design-system.css` with CSS custom properties (colors, spacing, font sizes, weights, radii, transitions, breakpoints) and base resets
 - [ ] Create `apps/web/src/instrumentation.ts` (Next.js instrumentation hook placeholder)
@@ -24,6 +24,9 @@ Define all domain types using Effect Schema. This phase has zero runtime behavio
 ### Branded IDs
 - [ ] `MenuItemId` — branded string
 - [ ] `OrderId` — branded string
+
+### Form Schemas
+- [ ] `CheckoutInfo` — `name: Schema.NonEmptyString`, `phone: Schema.String.pipe(Schema.pattern(...))`, `notes: Schema.optional(Schema.String)` — used as both domain validation and form validation via `effectTsResolver`
 
 ### Entities (Schema.Class)
 - [ ] `MenuItem` — `id: MenuItemId`, `name: Schema.NonEmptyString`, `description: string`, `price: Schema.positive`, `category: Schema.Literal("appetizer", "main", "side", "drink", "dessert")`, `imageUrl: string`, `available: boolean`
@@ -209,6 +212,7 @@ Wire services to HTTP using Effect RPC.
 
 ### `/cart` — Cart & Checkout
 - [ ] `app/cart/page.tsx` — renders `CartPanel` organism
+- [ ] Checkout form (name, phone, notes) powered by `react-hook-form` + `effectTsResolver` using a `CheckoutInfo` Schema from `lib/domain/`
 - [ ] "Place Order" triggers RPC `PlaceOrder`, handles typed errors inline
 - [ ] On success, redirect to `/orders/[id]`
 
@@ -283,3 +287,4 @@ Wire services to HTTP using Effect RPC.
 | XState Store | `lib/stores/cart.ts` |
 | React hooks bridging Effect | `lib/hooks/` |
 | RPC (contract + client + handler) | `lib/rpc/` |
+| Schema as form validation (react-hook-form) | `/cart` checkout form via `effectTsResolver` |
