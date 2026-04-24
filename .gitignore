@@ -19,6 +19,9 @@ dist/
 # turbo
 .turbo/
 
+# local database
+data/
+
 # misc
 .DS_Store
 *.pem

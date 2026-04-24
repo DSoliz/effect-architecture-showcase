@@ -1,0 +1,71 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) 0;
+  overflow-x: auto;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  flex: 1;
+  min-width: 0;
+}
+
+.stepLabel {
+  font-size: var(--font-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.connector {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2px;
+  background-color: var(--color-border);
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+.connectorCompleted {
+  background-color: var(--color-success);
+}
+
+.stepCompleted .stepLabel {
+  color: var(--color-success);
+  font-weight: var(--font-weight-semibold);
+}
+
+.stepActive .stepLabel {
+  color: var(--color-brand);
+  font-weight: var(--font-weight-bold);
+}
+
+.stepUpcoming .stepLabel {
+  color: var(--color-text-muted);
+}
+
+.stepCancelled .stepLabel {
+  color: var(--color-text-muted);
+}
+
+.cancelledContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) 0;
+}
+
+.cancelledSteps {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+  opacity: 0.5;
+}

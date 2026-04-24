@@ -1,0 +1,35 @@
+.dot {
+  display: inline-block;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.placed {
+  background-color: var(--color-warning);
+}
+
+.confirmed {
+  background-color: var(--color-brand);
+}
+
+.preparing {
+  background-color: var(--color-brand-light);
+}
+
+.ready {
+  background-color: var(--color-success);
+}
+
+.pickedUp {
+  background-color: var(--color-text-muted);
+}
+
+.delivered {
+  background-color: var(--color-success);
+}
+
+.cancelled {
+  background-color: var(--color-error);
+}

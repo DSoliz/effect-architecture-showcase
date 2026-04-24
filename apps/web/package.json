@@ -1,0 +1,39 @@
+{
+  "name": "@effect-eats/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "dev:orders": "node scripts/process-orders.mjs",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "next lint",
+    "test": "playwright test",
+    "test:unit": "vitest run"
+  },
+  "dependencies": {
+    "@effect/platform": "^0.96.0",
+    "@effect/platform-node": "^0.106.0",
+    "@effect/rpc": "^0.75.0",
+    "@hookform/resolvers": "^5",
+    "@xstate/store": "^3.17.1",
+    "effect": "^3.21.0",
+    "lokijs": "^1.5.12",
+    "next": "^15",
+    "react": "^19",
+    "react-dom": "^19",
+    "react-hook-form": "^7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1",
+    "@types/lokijs": "^1",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^15",
+    "typescript": "^5",
+    "vitest": "^3"
+  }
+}

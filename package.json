@@ -1,0 +1,16 @@
+{
+  "name": "effect-architecture-showcase",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev dev:orders",
+    "build": "turbo build",
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "test:unit": "turbo test:unit"
+  },
+  "devDependencies": {
+    "turbo": "^2"
+  },
+  "packageManager": "pnpm@10.11.0"
+}

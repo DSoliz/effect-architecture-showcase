@@ -46,6 +46,36 @@ No component-specific styles should go in `design-system.css`.
 - XState Store (@xstate/store)
 - react-hook-form + @hookform/resolvers (form handling with Effect Schema validation via `effectTsResolver`)
 
+## Functional Programming Principles
+
+This project follows functional programming principles. All code — especially Effect pipelines, services, and domain logic — should adhere to these guidelines.
+
+### Purity and Immutability
+- **Pure functions by default** — functions should return the same output for the same input and produce no observable side effects. Side effects belong inside `Effect`, `Stream`, or other Effect types that make them explicit and composable.
+- **Immutable data** — never mutate objects or arrays. Use spread syntax, `Array.map`, `Array.filter`, or Effect's `Ref` when mutable state is needed. Domain models (`Schema.Class`) are readonly by design — respect that.
+- **No `let` in logic** — use `const` exclusively. If a value needs to change, model it as a pipeline transformation or use `Ref` / `Effect.gen` intermediate bindings.
+- **No mutation of function arguments** — always return new values instead of modifying inputs.
+
+### IO at the Edges
+- **Push side effects to the boundary** — business logic and transformations should be pure. Side effects (database access, HTTP calls, logging, timestamps) should be wrapped in `Effect` and composed at the edges of the program.
+- **Services encapsulate IO** — all IO lives inside Effect services. Consumers of a service see only a pure interface of `Effect`-returning methods.
+- **React components are the outermost shell** — they call `Effect.runPromise` once at the boundary. Everything inside the Effect pipeline is declarative.
+
+### Declarative Over Imperative
+- **Describe what, not how** — prefer Effect combinators (`Effect.tap`, `Effect.map`, `Effect.catchTag`, `Stream.filter`, `Stream.takeUntil`) over imperative control flow (`if/else` with side effects, manual loops with mutation, `try/catch`).
+- **Compose, don't orchestrate** — build complex behavior by composing small, focused functions rather than writing long procedural blocks. Prefer pipelines (`.pipe()`) over deeply nested logic.
+
+### Composability Through Function Design
+- **Data-last parameter order** — when writing utility functions that operate on a value, place the "data" argument last so the function works naturally with `.pipe()` and partial application.
+- **Small, focused functions** — each function should do one thing. If a function has "and" in its description, split it.
+- **Use pipelines for transformations** — chain operations with `.pipe()` rather than storing intermediate results in variables, when the chain reads clearly. Break into named steps when the pipeline exceeds ~5 stages or readability suffers.
+- **Prefer expressions over statements** — use ternary expressions, `Effect.if`, and `Effect.match` over imperative `if/else` blocks when the result is a value.
+
+### Type-Driven Design
+- **Let types guide implementation** — define the types and interfaces first (schemas, service interfaces, error types), then implement. The type signatures document the contract.
+- **Branded types prevent misuse** — use branded IDs and domain-specific types rather than primitive `string`/`number` to make illegal states unrepresentable.
+- **Errors are values** — model failures as typed errors in the Effect error channel, not as thrown exceptions. This makes error handling explicit and exhaustive.
+
 ## Folder Structure
 
 ```
@@ -172,6 +202,22 @@ Use `react-hook-form` with the `effectTsResolver` from `@hookform/resolvers/effe
 - Use `effectTsResolver(MySchema)` as the `resolver` option in `useForm`
 - Map Schema field constraints (e.g. `Schema.NonEmptyString`, `Schema.pattern`) to user-friendly error messages via react-hook-form's `errors` object
 - Keep form components as molecules — they receive an `onSubmit` callback via props and do not call services directly
+
+## Prefer Declarative Effect Patterns Over Imperative Code
+
+When writing Effect code, favor Effect's built-in combinators and declarative patterns over imperative alternatives (try/catch, manual state, mutable variables, callbacks). The goal of this project is to showcase how Effect replaces imperative patterns with composable, type-safe alternatives.
+
+### Guidelines
+- **Error handling**: use `Effect.catchAll`, `Effect.catchTag`, or typed error channels — never `try/catch` around Effect code
+- **Resource cleanup**: use `Effect.ensuring`, `Effect.acquireRelease`, or `Scope` — never manual `finally` blocks or cleanup flags
+- **Sequential operations**: use `Effect.gen` or `.pipe()` — avoid chaining `.then()` on `runPromise` for logic that belongs inside the Effect
+- **Stream composition**: use `Stream.concat`, `Stream.merge`, `Stream.flatMap` — avoid mixing imperative `send()` callbacks with Stream operations
+- **Retries and scheduling**: use `Effect.retry`, `Schedule` — never manual `setTimeout`/`setInterval` loops inside Effect code
+- **Concurrency**: use `Effect.all` with concurrency options, `Effect.fork`, `Fiber` — avoid spawning untracked promises
+- **State**: use `Ref`, `PubSub`, `Queue` — avoid mutable variables shared across Effect boundaries
+- **Logging**: use `Effect.log`, `Effect.logDebug` — avoid `console.log` inside Effect pipelines (OK outside, e.g. middleware boundaries)
+
+When the boundary between Effect and non-Effect code is unavoidable (e.g. React hooks, Next.js route handlers), keep the imperative shell as thin as possible and push logic into the Effect pipeline.
 
 ## Effect.gen (Generator-based composition)
 

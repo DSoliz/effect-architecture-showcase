@@ -1,0 +1,5 @@
+.priceTag {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-base);
+  color: var(--color-text-primary);
+}

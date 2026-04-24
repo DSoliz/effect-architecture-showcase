@@ -1,0 +1,22 @@
+.errorContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-md);
+  background-color: color-mix(in srgb, var(--color-error) 8%, transparent);
+}
+
+.errorText {
+  font-size: var(--font-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-error);
+  line-height: 1.4;
+}
+
+.errorIcon {
+  flex-shrink: 0;
+  font-size: var(--font-lg);
+  color: var(--color-error);
+}
