@@ -14,7 +14,7 @@ interface OrderTrackerProps {
 
 export function OrderTracker({ orderId }: OrderTrackerProps) {
   const { order, loading, error } = useOrder(orderId);
-  const { status: liveStatus } = useOrderStatus(orderId);
+  const { status: liveStatus } = useOrderStatus(orderId, order?.status);
 
   if (loading) {
     return (

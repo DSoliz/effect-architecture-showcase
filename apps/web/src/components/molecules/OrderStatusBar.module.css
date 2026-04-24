@@ -1,59 +1,111 @@
-.container {
+.track {
   display: flex;
-  align-items: center;
-  gap: var(--space-xs);
+  align-items: flex-start;
   padding: var(--space-md) 0;
-  overflow-x: auto;
+  width: 100%;
 }
 
-.step {
+.stepWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-xs);
   flex: 1;
-  min-width: 0;
+  position: relative;
 }
 
-.stepLabel {
-  font-size: var(--font-xs);
-  font-weight: var(--font-weight-medium);
+/* Connecting line between circles */
+.connector {
+  position: absolute;
+  top: 1rem;
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  z-index: 0;
+}
+
+.connectorCompleted {
+  background-color: var(--color-brand);
+}
+
+.connectorUpcoming {
+  background-color: var(--color-border);
+}
+
+.connectorCancelled {
+  background-color: var(--color-border);
+}
+
+/* Step circle */
+.circle {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.circleCompleted {
+  background-color: var(--color-brand);
+  color: var(--color-bg-primary);
+  border: 2px solid var(--color-brand);
+}
+
+.circleActive {
+  background-color: var(--color-bg-primary);
+  color: var(--color-brand);
+  border: 2px solid var(--color-brand);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+.circleUpcoming {
+  background-color: var(--color-bg-secondary);
   color: var(--color-text-muted);
+  border: 2px solid var(--color-border);
+}
+
+.circleCancelled {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-border);
+  opacity: 0.5;
+}
+
+/* Step label */
+.label {
+  margin-top: var(--space-xs);
+  font-size: var(--font-xs);
   text-align: center;
   white-space: nowrap;
 }
 
-.connector {
-  flex: 0 0 auto;
-  width: 2rem;
-  height: 2px;
-  background-color: var(--color-border);
-  align-self: flex-start;
-  margin-top: 0.5rem;
+.labelCompleted {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
 }
 
-.connectorCompleted {
-  background-color: var(--color-success);
-}
-
-.stepCompleted .stepLabel {
-  color: var(--color-success);
-  font-weight: var(--font-weight-semibold);
-}
-
-.stepActive .stepLabel {
+.labelActive {
   color: var(--color-brand);
   font-weight: var(--font-weight-bold);
 }
 
-.stepUpcoming .stepLabel {
+.labelUpcoming {
   color: var(--color-text-muted);
+  font-weight: var(--font-weight-normal);
 }
 
-.stepCancelled .stepLabel {
+.labelCancelled {
   color: var(--color-text-muted);
+  font-weight: var(--font-weight-normal);
+  opacity: 0.5;
 }
 
+/* Cancelled wrapper */
 .cancelledContainer {
   display: flex;
   flex-direction: column;
@@ -62,10 +114,18 @@
   padding: var(--space-md) 0;
 }
 
-.cancelledSteps {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  width: 100%;
-  opacity: 0.5;
+@media (max-width: 640px) {
+  .label {
+    font-size: 0.625rem;
+  }
+
+  .circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: var(--font-xs);
+  }
+
+  .connector {
+    top: 0.75rem;
+  }
 }

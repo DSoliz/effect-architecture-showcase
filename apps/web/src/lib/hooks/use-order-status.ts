@@ -3,12 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import { OrderId, OrderStatus } from "@/lib/domain";
 
-export function useOrderStatus(orderId: OrderId) {
+const TERMINAL_STATUSES: ReadonlySet<OrderStatus> = new Set(["delivered", "cancelled"]);
+
+export function useOrderStatus(orderId: OrderId, initialStatus?: OrderStatus | null) {
   const [status, setStatus] = useState<OrderStatus | null>(null);
   const [connected, setConnected] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
 
+  const resolved = initialStatus != null;
+  const terminal = resolved && TERMINAL_STATUSES.has(initialStatus);
+
   useEffect(() => {
+    if (!resolved || terminal) return;
+
     const es = new EventSource(`/api/orders/${orderId}/sse`);
     eventSourceRef.current = es;
 
@@ -17,7 +24,14 @@ export function useOrderStatus(orderId: OrderId) {
     es.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        setStatus(data.status as OrderStatus);
+        const newStatus = data.status as OrderStatus;
+        setStatus(newStatus);
+
+        if (TERMINAL_STATUSES.has(newStatus)) {
+          es.close();
+          eventSourceRef.current = null;
+          setConnected(false);
+        }
       } catch {
         // ignore parse errors
       }
@@ -32,7 +46,7 @@ export function useOrderStatus(orderId: OrderId) {
       eventSourceRef.current = null;
       setConnected(false);
     };
-  }, [orderId]);
+  }, [orderId, resolved, terminal]);
 
   return { status, connected };
 }

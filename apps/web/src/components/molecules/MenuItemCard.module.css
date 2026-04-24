@@ -23,9 +23,7 @@
   justify-content: center;
   height: 160px;
   background-color: var(--color-bg-accent);
-  color: var(--color-brand);
-  font-size: var(--font-3xl);
-  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
   user-select: none;
 }
 

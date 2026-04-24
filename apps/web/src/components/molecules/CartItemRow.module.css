@@ -23,6 +23,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
+  flex-shrink: 0;
 }
 
 .quantityButton {
@@ -62,11 +63,17 @@
   font-size: var(--font-sm);
   color: var(--color-text-muted);
   white-space: nowrap;
+  min-width: 5.5rem;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 .lineTotal {
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
+  min-width: 4.5rem;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 @media (max-width: 640px) {

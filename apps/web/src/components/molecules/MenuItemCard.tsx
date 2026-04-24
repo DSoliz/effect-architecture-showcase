@@ -3,6 +3,7 @@
 import type { MenuItem } from "@/lib/domain";
 import { Badge } from "@/components/atoms/Badge";
 import { Button } from "@/components/atoms/Button";
+import { CategoryIcon } from "@/components/atoms/CategoryIcon";
 import { PriceTag } from "@/components/atoms/PriceTag";
 import styles from "./MenuItemCard.module.css";
 
@@ -17,7 +18,7 @@ export function MenuItemCard({ item, onAddToCart }: MenuItemCardProps) {
   return (
     <div className={`${styles.card}${disabled ? ` ${styles.cardDisabled}` : ""}`}>
       <div className={styles.imagePlaceholder}>
-        {item.name.charAt(0).toUpperCase()}
+        <CategoryIcon category={item.category} size={56} />
       </div>
       <div className={styles.content}>
         <div className={styles.header}>
